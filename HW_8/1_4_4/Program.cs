@@ -17,8 +17,13 @@ int number = int.Parse(Console.ReadLine()!);
             }
  
             for (int i = 0; i < y; i++)
+            if (i == y - 1)
             {
-                Console.Write(result%10+ " , ");
+                Console.Write(result % 10);
+            } 
+            else
+            {
+                Console.Write(result % 10 + " , ");
                 result /= 10;
             }
  
