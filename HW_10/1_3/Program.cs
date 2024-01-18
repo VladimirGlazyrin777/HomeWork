@@ -7,10 +7,10 @@ class Program
         static void Main(string[] args)
         {
                 int[] myArray = { 1, 10, 0, -5 };
-                Console.WriteLine("\n Вывод массива: ");
+                Console.Write("Вывод массива: ");
                 for (int i = myArray.Length - 1; i >= 0; i--)
                 {
-                        Console.WriteLine(myArray[i]);
+                        Console.Write(myArray[i] +" ");     
                 }
                 Console.ReadLine();
         }
