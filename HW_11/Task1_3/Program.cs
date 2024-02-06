@@ -3,59 +3,93 @@
 
 // Программа считает сумму элементов в каждой строке и выдаёт номер строки с наименьшей суммой элементов: 1 строка
 
-void CreateArray(int[,] matrix)   // метод создания двумерного массива с возможностью вывода на экран
+using System;
+
+//Тело класса будет написано студентом. Класс обязан иметь статический метод PrintResult()
+class UserInputToCompileForTest
 {
-    for (int i = 0; i < matrix.GetLength(0); i++)
+    /// Вычисление сумм по строкам (на выходе массив с суммами строк)
+    public static int[] SumRows(int[,] array)
     {
-        for (int j = 0; j < matrix.GetLength(1); j++)
+        int[] sum = new int[array.GetLength(0)];
+        for (int i = 0; i < array.GetLength(0); i++)
         {
-            Console.Write($"{matrix[i, j]} ");
+            for (int j = 0; j < array.GetLength(1); j++)
+            {
+                sum[i] += array[i, j];
+            }
         }
-        Console.WriteLine();
+        return sum;
+    }
+
+    // Получение индекса минимального элемента в одномерном массиве
+    public static int MinIndex(int[] array)
+    {
+        int minI = 0;
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (array[minI] > array[i])
+            {
+                minI = i;
+            }
+        }
+        return minI;
+    }
+    public static void PrintResult(int[,] numbers)
+    {   
+        int[] sums = SumRows(numbers);
+        int minIndex = MinIndex(sums);
+        Console.Write(minIndex);
     }
 }
-int[,] FillArray(int[,] matrix, int min, int max) // метод заполнения массива случайными числами в указанном пользователем диапазоне
+
+//Не удаляйте и не меняйте класс Answer!
+class Answer
 {
-    for (int i = 0; i < matrix.GetLength(0); i++)
+    public static void Main(string[] args)
     {
-        for (int j = 0; j < matrix.GetLength(1); j++)
+        int[,] numbers;
+
+        if (args.Length >= 1)
         {
-            matrix[i, j] = new Random().Next(min, max);
+            // Предполагается, что строки разделены запятой и пробелом, а элементы внутри строк разделены пробелом
+            string[] rows = args[0].Split(',');
+
+            int rowCount = rows.Length;
+            int colCount = rows[0].Trim().Split(' ').Length;
+
+            numbers = new int[rowCount, colCount];
+
+            for (int i = 0; i < rowCount; i++)
+            {
+                string[] rowElements = rows[i].Trim().Split(' ');
+
+                for (int j = 0; j < colCount; j++)
+                {
+                    if (int.TryParse(rowElements[j], out int result))
+                    {
+                        numbers[i, j] = result;
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Error parsing element {rowElements[j]} to an integer.");
+                        return;
+                    }
+                }
+            }
         }
+        else
+        {
+            // Если аргументов на входе нет, используем примерный массив
+
+            numbers = new int[,] {
+                {1, 2, 3},
+                {1, 1, 0},
+                {7, 8, 2},
+                {9, 10, 11}
+    };      
+        }
+        UserInputToCompileForTest.PrintResult(numbers);
     }
-    return matrix;
 }
-int SumDigitsRows(int[,] matrix) // метод вычисления суммы элементов строки, сравнения сумм чисел и сохранения индекса строки
-{
-    int index = 1;
-    int result = 0;
-    for (int i = 0; i < matrix.GetLength(0); i++)
-    {
-        int sum = 0;
-        for (int j = 0; j < matrix.GetLength(1); j++)
-        {
-            sum += matrix[i, j];
-        }
-        if (i == 0) result = sum;
-        else if (sum < result) 
-        {
-            result = sum; 
-            index = i + 1;
-        }
-    }
-    return index;    
-}
-Console.WriteLine("Введите число строк массива "); 
-int m = int.Parse(Console.ReadLine());
-Console.WriteLine("Введите число столбцов массива "); 
-int n = int.Parse(Console.ReadLine());
-Console.WriteLine("Введите максимальный элемент массива "); 
-int max = int.Parse(Console.ReadLine());
-Console.WriteLine("Введите минимальный массива "); 
-int min = int.Parse(Console.ReadLine());
-int[,] array = new int[m, n];
-FillArray(array, max, min);
-CreateArray(array);
-Console.WriteLine();
-int index = SumDigitsRows(array); 
-Console.WriteLine("Наименьшая сумма элементов в строке " + index);
+
